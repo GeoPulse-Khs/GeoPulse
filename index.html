@@ -37,12 +37,11 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    .login-card h2 {
+    .login-card img {
+      width: 120px;
       margin-bottom: 20px;
-      color: #003399;
-      font-weight: 700;
-      font-size: 26px;
-      letter-spacing: 1px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
     .form-group {
@@ -130,7 +129,8 @@
 
 <body>
   <div class="login-card">
-    <h2>GeoPulse Login</h2>
+    <!-- Logo Image -->
+    <img src="logo2.jpg" alt="GeoPulse Logo">
 
     <form onsubmit="handleLogin(event)">
       <div class="form-group">
