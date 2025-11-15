@@ -25,12 +25,10 @@
       border-radius: 18px;
       text-align: center;
 
-      /* Glass Effect */
-      background: rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(12px);
+      /* WHITE CARD */
+      background: rgba(255,255,255, 1);
       box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 
-      /* Fade-in Animation */
       animation: fadeIn 0.7s ease-in-out;
     }
 
@@ -41,17 +39,18 @@
 
     .login-card h2 {
       margin-bottom: 20px;
-      color: white;
-      letter-spacing: 1px;
-      font-weight: 600;
+      color: #003399;
+      font-weight: 700;
       font-size: 26px;
+      letter-spacing: 1px;
     }
 
     .form-group {
       text-align: left;
       margin-bottom: 14px;
-      color: white;
+      color: #222;
       font-size: 14px;
+      font-weight: 600;
     }
 
     input {
@@ -60,14 +59,16 @@
       border-radius: 10px;
       border: none;
       font-size: 16px;
-      outline: none;
-      background: rgba(255,255,255,0.7);
+
+      /* GRAY INPUT FIELD */
+      background: #d9d9d9;
       transition: 0.2s;
     }
 
     input:focus {
-      background: white;
-      box-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
+      outline: none;
+      background: #cfcfcf;
+      box-shadow: 0 0 6px rgba(0,0,0,0.25);
     }
 
     button {
@@ -86,16 +87,17 @@
     }
 
     button:hover {
-      box-shadow: 0 0 15px rgba(255,255,255,0.8);
       transform: scale(1.03);
+      box-shadow: 0 0 12px rgba(255,255,255,0.8);
     }
 
     #error-message {
-      color: #ffbcbc;
+      color: #d60000;
       height: 18px;
       margin-top: 12px;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: bold;
+      text-align: center;
     }
   </style>
 
