@@ -1,12 +1,77 @@
 <!DOCTYPE html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Geo Pulse</title>
-  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #007bff; /* BLUE BACKGROUND */
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-card {
+      background: #e0e0e0; /* GRAY CARD */
+      padding: 30px;
+      width: 90%;
+      max-width: 350px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .login-card h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #999;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #0059d6; /* BLUE BUTTON */
+      color: white;        /* WHITE TEXT */
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+
+    #error-message {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+      min-height: 18px;
+    }
+  </style>
+
   <script>
-    // A simple mock of valid users (username/password pairs)
     const users = {
       'Karl': 'Campo',
       'Dhereck': 'Baniqued',
@@ -17,67 +82,45 @@
       'Gabriele': 'Vergara',
     };
 
-    // Handle form submission
     function handleLogin(event) {
       event.preventDefault();
-
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
 
-      // Check if the username and password match
       if (users[username] && users[username] === password) {
-        // Store the login state in localStorage (or sessionStorage)
         localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', username); // Store the username
-
-        // Redirect to the second page after successful login
-        window.location.href = 'geopulse.html';
+        localStorage.setItem('username', username);
+        window.location.href = "geopulse.html";
       } else {
-        // Show an error message if the credentials are incorrect
         document.getElementById('error-message').textContent = "Invalid username or password.";
       }
     }
   </script>
 </head>
+
 <body>
 
-  <main class="split">
-
-    <!-- LEFT SIDE -->
-    <section class="left">
-      <div class="brand">
-        <img src="LOGO.jpg" alt="GeoPulse Logo" width="200">
-        <h1>GeoPulse</h1>
-        <p>Building Resilience Through Early Detection.</p>
+  <div class="login-card">
+    <h2>Sign In</h2>
+    <form id="login-form">
+      <div class="form-group">
+        <label>Username</label>
+        <input id="username" required>
       </div>
-    </section>
 
-    <!-- RIGHT SIDE -->
-    <section class="right">
-      <div class="card">
-        <h2>Login</h2>
-        <form id="login-form">
-          <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-          </div>
-
-          <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-          </div>
-
-          <button type="submit">Login</button>
-        </form>
-        <p id="error-message" style="color:red;"></p>
+      <div class="form-group">
+        <label>Password</label>
+        <input id="password" type="password" required>
       </div>
-    </section>
 
-  </main>
+      <button type="submit">Sign In</button>
+    </form>
+
+    <p id="error-message"></p>
+  </div>
 
   <script>
-    // Attach the form submission handler
-    document.getElementById('login-form').addEventListener('submit', handleLogin);
+    document.getElementById("login-form").addEventListener("submit", handleLogin);
   </script>
 
 </body>
