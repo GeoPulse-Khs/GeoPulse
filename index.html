@@ -2,67 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GeoPulse Login</title>
+  <title>1Page - Game Development</title>
   <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body>
 
-<div class="login-container">
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="logo">GeoPulse</div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Services</a>
+    <a href="#">Portfolio</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
 
-  <div class="login-card">
-
-    <!-- OLD LEFT TEXT MOVED HERE -->
-    <h1 class="brand-title">GeoPulse</h1>
-    <p class="brand-desc">Real-time geological intelligence at your fingertips.</p>
-
-    <img src="logo2.jpg" class="login-logo" alt="Logo">
-
-    <h2>Sign in to GeoPulse</h2>
-
-    <form id="loginForm">
-      <label>Username</label>
-      <input type="text" id="username" required>
-
-      <label>Password</label>
-      <input type="password" id="password" required>
-
-      <a href="#" class="forgot">Forgot password?</a>
-
-      <button type="submit" class="login-btn">Sign In</button>
-    </form>
-
-    <div class="divider">OR</div>
-
-    <button class="oauth-btn google">
-      Continue with Google
-    </button>
-
-    <button class="oauth-btn apple">
-      Continue with Apple
-    </button>
-
-    <p class="small">
-      New user? <a href="#">Create account</a>
-    </p>
-
-    <button id="darkToggle" class="dark-toggle">🌙 Dark Mode</button>
-
+<!-- HERO SECTION -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>GeoPlulse</h1>
+    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+    <!-- KEEPED BOX BUTTON AND MADE IT WORK -->
+    <div class="button-box">
+      <a href="login.html" class="btn">GET STARTED</a>
+    </div>
   </div>
-</div>
+</section>
 
-<script>
-document.getElementById("loginForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  window.location.href = "geopulse.html"; // REDIRECT AFTER LOGIN
-});
+<!-- WELCOME SECTION -->
+<section class="welcome">
+  <h2>Welcome To Our Website</h2>
+  <p>
+    GeoPulse is a student created website for monitoring shallow landslides in the Phillipines.
+  </p>
+  <button class="secondary-btn">Read More</button>
+</section>
 
-// DARK MODE TOGGLE
-document.getElementById("darkToggle").addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-});
-</script>
+<!-- STORY / MISSION / VISION -->
+<section class="triple-box">
+  <div class="box">
+    <h3>Core Values</h3>
+    <p>Maka-Diyos, Maka-Tao, Maka-Kakalikasan, at Maka-Bansa</p>
+  </div>
+  <div class="box dark">
+    <h3>Our Mission</h3>
+    <p>Save Filipino people from the dangers of shallow landslides.</p>
+  </div>
+  <div class="box">
+    <h3>Our Vision</h3>
+    <p>Low-cost landslide monitoring for everyone.</p>
+  </div>
+</section>
 
 </body>
 </html>
