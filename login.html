@@ -5,16 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GeoPulse Login</title>
     <style>
-        /* Basic reset */
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
             font-family: Arial, sans-serif;
-        }
-
-        body {
-            background-color: #f0f4f8; /* light background */
+            background-color: #f0f4f8;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -31,7 +26,7 @@
         }
 
         .login-card h2 {
-            color: #0d6efd; /* Blue */
+            color: #0d6efd;
             margin-bottom: 20px;
         }
 
@@ -92,6 +87,23 @@
         .divider:not(:empty)::after {
             margin-left: .5em;
         }
+
+        #welcomeMsg {
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #0d6efd;
+        }
+
+        #profilePic {
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            margin-top: 10px;
+        }
     </style>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -100,7 +112,11 @@
     <div class="login-card">
         <h2>GeoPulse Login</h2>
 
-        <!-- Standard Login Form -->
+        <!-- Show logged-in info if exists -->
+        <p id="welcomeMsg"></p>
+        <img id="profilePic" width="80" style="display:none">
+
+        <!-- Standard Login -->
         <input type="email" id="email" placeholder="Email">
         <input type="password" id="password" placeholder="Password">
         <button class="login-btn" onclick="handleLogin()">Login</button>
@@ -108,39 +124,62 @@
         <div class="divider">or</div>
 
         <!-- Google Sign-In Button -->
-        <div id="g_id_onload"
-             data-client_id="YOUR_GOOGLE_CLIENT_ID"
-             data-login_uri="http://localhost:5500/google-login"
-             data-auto_prompt="false">
-        </div>
-
         <div class="g_id_signin google-btn" data-type="standard"></div>
+
+        <!-- Logout button -->
+        <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
 
     <script>
-        // Standard login simulation
-        function handleLogin() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+        // Check if user is already logged in
+        const emailStored = localStorage.getItem("userEmail");
+        const nameStored = localStorage.getItem("userName");
+        const pictureStored = localStorage.getItem("userPicture");
 
-            if(email === "" || password === "") {
-                alert("Please fill in both email and password.");
+        if (emailStored) {
+            document.getElementById("welcomeMsg").innerText = 
+                "Logged in as: " + (nameStored || emailStored);
+            if (pictureStored) {
+                const img = document.getElementById("profilePic");
+                img.src = pictureStored;
+                img.style.display = "block";
+            }
+        }
+
+        // Standard login
+        function handleLogin() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            if (!email || !password) {
+                alert("Please fill in both fields");
                 return;
             }
 
-            // Simulate login success
-            alert("Logged in as " + email);
+            localStorage.setItem("userEmail", email);
+            localStorage.setItem("loginMethod", "email");
+            localStorage.setItem("userPassword", password); // For demo only
+
+            // Redirect to geopulse.html
+            window.location.href = "geopulse.html";
         }
 
-        // Google Sign-in callback
+        // Google login
         function handleCredentialResponse(response) {
-            console.log("Encoded JWT ID token: " + response.credential);
-            alert("Google login successful! Token: " + response.credential);
+            const data = JSON.parse(atob(response.credential.split(".")[1]));
+
+            localStorage.setItem("userEmail", data.email);
+            localStorage.setItem("userName", data.name);
+            localStorage.setItem("userPicture", data.picture);
+            localStorage.setItem("loginMethod", "google");
+
+            window.location.href = "geopulse.html";
         }
 
+        // Initialize Google button
         window.onload = () => {
             google.accounts.id.initialize({
-                client_id: 'YOUR_GOOGLE_CLIENT_ID',
+                client_id: "YOUR_GOOGLE_CLIENT_ID",
                 callback: handleCredentialResponse
             });
 
@@ -148,10 +187,20 @@
                 document.querySelector(".g_id_signin"),
                 { theme: "outline", size: "large", width: "100%" }
             );
-
-            google.accounts.id.prompt(); // optional
         };
-    </script>
 
+        // Logout
+        function logout() {
+            localStorage.removeItem("userEmail");
+            localStorage.removeItem("userName");
+            localStorage.removeItem("userPicture");
+            localStorage.removeItem("userPassword");
+            localStorage.removeItem("loginMethod");
+
+            document.getElementById("welcomeMsg").innerText = "";
+            document.getElementById("profilePic").style.display = "none";
+            alert("Logged out successfully!");
+        }
+    </script>
 </body>
 </html>
