@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GeoPulse Login</title>
+
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <style>
         body {
             margin: 0;
@@ -74,7 +78,8 @@
             text-align: center;
         }
 
-        .divider::before, .divider::after {
+        .divider::before,
+        .divider::after {
             content: '';
             flex: 1;
             border-bottom: 1px solid #ccc;
@@ -97,6 +102,7 @@
         #profilePic {
             border-radius: 50%;
             margin-bottom: 10px;
+            display: none;
         }
 
         .logout-btn {
@@ -105,102 +111,98 @@
             margin-top: 10px;
         }
     </style>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
+
 <body>
 
-    <div class="login-card">
-        <h2>GeoPulse Login</h2>
+<div class="login-card">
+    <h2>GeoPulse Login</h2>
 
-        <!-- Show logged-in info if exists -->
-        <p id="welcomeMsg"></p>
-        <img id="profilePic" width="80" style="display:none">
+    <!-- Logged-in info -->
+    <p id="welcomeMsg"></p>
+    <img id="profilePic" width="80">
 
-        <!-- Standard Login -->
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
-        <button class="login-btn" onclick="handleLogin()">Login</button>
+    <!-- Email Login -->
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button class="login-btn" onclick="handleLogin()">Login</button>
 
-        <div class="divider">or</div>
+    <div class="divider">or</div>
 
-        <!-- Google Sign-In Button -->
-        <div class="g_id_signin google-btn" data-type="standard"></div>
+    <!-- Google Sign-In -->
+    <div class="g_id_signin"></div>
 
-        <!-- Logout button -->
-        <button class="logout-btn" onclick="logout()">Logout</button>
-    </div>
+    <!-- Logout -->
+    <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
 
-    <script>
-        // Check if user is already logged in
-        const emailStored = localStorage.getItem("userEmail");
-        const nameStored = localStorage.getItem("userName");
-        const pictureStored = localStorage.getItem("userPicture");
+<script>
+    // Show existing login
+    const emailStored = localStorage.getItem("userEmail");
+    const nameStored = localStorage.getItem("userName");
+    const pictureStored = localStorage.getItem("userPicture");
 
-        if (emailStored) {
-            document.getElementById("welcomeMsg").innerText = 
-                "Logged in as: " + (nameStored || emailStored);
-            if (pictureStored) {
-                const img = document.getElementById("profilePic");
-                img.src = pictureStored;
-                img.style.display = "block";
-            }
+    if (emailStored) {
+        document.getElementById("welcomeMsg").innerText =
+            "Logged in as: " + (nameStored || emailStored);
+
+        if (pictureStored) {
+            const img = document.getElementById("profilePic");
+            img.src = pictureStored;
+            img.style.display = "block";
+        }
+    }
+
+    // Email login (demo)
+    function handleLogin() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        if (!email || !password) {
+            alert("Please fill in both fields");
+            return;
         }
 
-        // Standard login
-        function handleLogin() {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("userPassword", password);
+        localStorage.setItem("loginMethod", "email");
 
-            if (!email || !password) {
-                alert("Please fill in both fields");
-                return;
-            }
+        window.location.href = "geopulse.html";
+    }
 
-            localStorage.setItem("userEmail", email);
-            localStorage.setItem("loginMethod", "email");
-            localStorage.setItem("userPassword", password); // For demo only
+    // Google login callback
+    function handleCredentialResponse(response) {
+        const data = JSON.parse(atob(response.credential.split(".")[1]));
 
-            // Redirect to geopulse.html
-            window.location.href = "geopulse.html";
-        }
+        localStorage.setItem("userEmail", data.email);
+        localStorage.setItem("userName", data.name);
+        localStorage.setItem("userPicture", data.picture);
+        localStorage.setItem("loginMethod", "google");
 
-        // Google login
-        function handleCredentialResponse(response) {
-            const data = JSON.parse(atob(response.credential.split(".")[1]));
+        window.location.href = "geopulse.html";
+    }
 
-            localStorage.setItem("userEmail", data.email);
-            localStorage.setItem("userName", data.name);
-            localStorage.setItem("userPicture", data.picture);
-            localStorage.setItem("loginMethod", "google");
+    // Init Google Sign-In
+    window.onload = () => {
+        google.accounts.id.initialize({
+            client_id: "922030653595-fm09b69bkirqh2bcdts0ia9u2m2jo4b3.apps.googleusercontent.com",
+            callback: handleCredentialResponse
+        });
 
-            window.location.href = "geopulse.html";
-        }
+        google.accounts.id.renderButton(
+            document.querySelector(".g_id_signin"),
+            { theme: "outline", size: "large", width: "100%" }
+        );
+    };
 
-        // Initialize Google button
-        window.onload = () => {
-            google.accounts.id.initialize({
-                client_id: "YOUR_GOOGLE_CLIENT_ID",
-                callback: handleCredentialResponse
-            });
+    // Logout
+    function logout() {
+        localStorage.clear();
+        document.getElementById("welcomeMsg").innerText = "";
+        document.getElementById("profilePic").style.display = "none";
+        alert("Logged out successfully!");
+    }
+</script>
 
-            google.accounts.id.renderButton(
-                document.querySelector(".g_id_signin"),
-                { theme: "outline", size: "large", width: "100%" }
-            );
-        };
-
-        // Logout
-        function logout() {
-            localStorage.removeItem("userEmail");
-            localStorage.removeItem("userName");
-            localStorage.removeItem("userPicture");
-            localStorage.removeItem("userPassword");
-            localStorage.removeItem("loginMethod");
-
-            document.getElementById("welcomeMsg").innerText = "";
-            document.getElementById("profilePic").style.display = "none";
-            alert("Logged out successfully!");
-        }
-    </script>
 </body>
 </html>
